@@ -18,6 +18,8 @@ namespace JHOEC.Controllers
             _context = context;
         }
 
+
+
         // GET: JHCrop
         public async Task<IActionResult> Index()
         {
