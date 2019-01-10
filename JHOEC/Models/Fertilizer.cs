@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JHOEC.Models
 {
@@ -9,8 +10,10 @@ namespace JHOEC.Models
         {
             TreatmentFertilizer = new HashSet<TreatmentFertilizer>();
         }
-
+        [Required]
+        [Display(Name = "Fertilizer Name")]
         public string FertilizerName { get; set; }
+        [Display(Name ="OEC Products?")]
         public bool Oecproduct { get; set; }
         public bool Liquid { get; set; }
 

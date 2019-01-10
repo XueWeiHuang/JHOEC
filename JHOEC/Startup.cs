@@ -40,7 +40,7 @@ namespace JHOEC
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<OECContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("OECConnection")));
 
 
 

@@ -26,11 +26,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">JHOEC</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="navbar-brand glyphicon-align-center" src="~/images/logo.jpg" /> OEC Fertilizers</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="JHCrop" asp-action="Index">Crops</a></li>
+                    <li><a asp-area="" asp-controller="JHFertilizer" asp-action="Index">Fertilizers</a></li>
 
                 </ul>
                 <partial name="_LoginPartial" />
