@@ -1,0 +1,4 @@
+﻿Data Source=LAPTOP-N5C7LNBV;Initial Catalog=OEC;Integrated Security=True
+
+
+Scaffold-DbContext –Connection "Data Source=LAPTOP-N5C7LNBV;Initial Catalog=OEC;Integrated Security=True;" -Provider "Microsoft.EntityFrameworkCore.SqlServer" -OutputDir "Models" –Context "OECContext" –Verbose -Force
