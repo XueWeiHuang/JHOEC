@@ -19,12 +19,22 @@ namespace JHOEC.Controllers
         }
 
         // GET: JHFertilizer
+        /// <summary>
+        /// Allow user to view the list of fertilizers
+        /// </summary>
+        /// <returns>Index view with fertilizers displayed in list</returns>
         public async Task<IActionResult> Index()
         {
             return View(await _context.Fertilizer.ToListAsync());
         }
 
         // GET: JHFertilizer/Details/5
+        /// <summary>
+        /// When a fertilizer is selected, the id of the fertilizer is passed in as parameter, then this specific fertilizer is passed in 
+        /// Detail view() page to dsiplay its detail
+        /// </summary>
+        /// <param name="id">points to the specific fertilizer</param>
+        /// <returns>Detail view() with slected fertilizer</returns>
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -43,6 +53,10 @@ namespace JHOEC.Controllers
         }
 
         // GET: JHFertilizer/Create
+        /// <summary>
+        /// Allow Create view() page to show
+        /// </summary>
+        /// <returns>Create view() page</returns>
         public IActionResult Create()
         {
             return View();
@@ -51,6 +65,11 @@ namespace JHOEC.Controllers
         // POST: JHFertilizer/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Checks input from form for binding variables and avoid malicious injection, create a new fertilizer and save it to database
+        /// </summary>
+        /// <param name="fertilizer"></param>
+        /// <returns>updated index view() page if new fertilizer is sucessfully created</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FertilizerName,Oecproduct,Liquid")] Fertilizer fertilizer)
@@ -65,6 +84,11 @@ namespace JHOEC.Controllers
         }
 
         // GET: JHFertilizer/Edit/5
+        /// <summary>
+        /// validate the selected fertilizer Id, and pass into Edit view() to show detail of selected fertilizer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Edit view() with detail of selected fertilizer</returns>
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -83,6 +107,12 @@ namespace JHOEC.Controllers
         // POST: JHFertilizer/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Allow user to save modified fertilizer detail to the spcific fertilizer detail in the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="fertilizer"></param>
+        /// <returns>Update Index view() page with updated list of fertilizer</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("FertilizerName,Oecproduct,Liquid")] Fertilizer fertilizer)
@@ -116,6 +146,11 @@ namespace JHOEC.Controllers
         }
 
         // GET: JHFertilizer/Delete/5
+        /// <summary>
+        /// validate specific fertilizer id, and show delete confirmation page with detail of selected fertilizer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -134,6 +169,11 @@ namespace JHOEC.Controllers
         }
 
         // POST: JHFertilizer/Delete/5
+        /// <summary>
+        /// Once the delete action is confirmed, delete the detail of specific fertilizer and update list of fertilizer in the Index view() page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>updated list of fertilizer in the Index view() if the delete action is sucessfull</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
