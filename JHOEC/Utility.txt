@@ -2,3 +2,8 @@
 
 
 Scaffold-DbContext –Connection "Data Source=LAPTOP-N5C7LNBV;Initial Catalog=OEC;Integrated Security=True;" -Provider "Microsoft.EntityFrameworkCore.SqlServer" -OutputDir "Models" –Context "OECContext" –Verbose -Force
+
+
+Code first approac, one you finish creating models, 
+Add-Migration [Migration name] -Context  ContextName
+Update Database -Context ContextName
