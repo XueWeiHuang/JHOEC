@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,14 +27,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" ><img  style="float:left;max-height:50px; margin-right:7px;" src="~/images/logo.jpg" /></a>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="color:yellow;"> OEC Fertilizers</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index"><img style="float:left;max-height:100px; margin-right:7px;" src="~/images/logo.jpg" /></a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" style="color:yellow;"> Waterloo Fertilizers</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="JHCrop" asp-action="Index">Crops</a></li>
                     <li><a asp-area="" asp-controller="JHFertilizer" asp-action="Index">Fertilizers</a></li>
+                    <li><a asp-area="" asp-controller="JHVariety" asp-action="Index">Variety</a></li>
 
                 </ul>
                 <partial name="_LoginPartial" />
@@ -41,7 +43,11 @@
         </div>
     </nav>
 
+    <p style="color:red; font-weight:bold">@TempData["message"]</p>
+
     <partial name="_CookieConsentPartial" />
+
+
 
     <div class="container body-content">
         @RenderBody()
@@ -64,18 +70,18 @@
                     </ul>
                 </div>
                 <div class="col-sm-6">
-                    <ul  class="nav navbar-nav pull-right">
+                    <ul class="nav navbar-nav pull-right">
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                     </ul>
                 </div>
                 @*<div class="pull-right">
-                <ul class="list-inline">
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>*@
+                            <ul class="list-inline">
+                                <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                                <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>*@
 
 
 
@@ -105,6 +111,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+
 
     @RenderSection("Scripts", required: false)
 </body>
