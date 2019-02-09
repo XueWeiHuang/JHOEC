@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JHOEC.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace JHOEC.Controllers
 {
@@ -19,10 +20,36 @@ namespace JHOEC.Controllers
         }
 
         // GET: JHVariety
-        public async Task<IActionResult> Index(int CropId, string CropName)
+        public async Task<IActionResult> Index(int cropId)
         {
-            var oECContext = _context.Variety.Include(v => v.Crop).Where(v=>v.CropId==CropId);
+            
+            if (Request.Query["cropId"].FirstOrDefault() != null && cropId!=0)
+            {
+                var _cropId = 0;
+                HttpContext.Session.SetInt32(nameof(_cropId),cropId);
+
+            }
+
+            
+            else if (HttpContext.Session.GetInt32(nameof(cropId))!=null)
+            {
+                
+                cropId = Convert.ToInt32(HttpContext.Session.GetInt32(nameof(cropId)));
+                //cropName = HttpContext.Session.GetString(nameof(cropName));
+
+
+            }
+
+
+            else
+            {
+                TempData["message"] = "fuck you ";
+                return Redirect($"/JHCrop/Index/");
+            }
+            var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
             return View(await oECContext.ToListAsync());
+            
+
         }
 
         // GET: JHVariety/Details/5
