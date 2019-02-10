@@ -19,26 +19,25 @@ namespace JHOEC.Controllers
             _context = context;
         }
 
-        private int cropid=0;
-        public int CropId
+        private string cropid;
+        public string CropId
         {
             get { return cropid; }
             set { cropid = value; }
         }
         // GET: JHVariety
-        public async Task<IActionResult> Index(int cropId, string cropName)
+        public async Task<IActionResult> Index(int? cropId, string cropName)
         {
             
-            if (Request.Query["cropId"].FirstOrDefault() != null && cropId!=0)
-            {
-                
-                HttpContext.Session.SetInt32(nameof(CropId),cropId);
+            if (cropId != null && cropId!=0)
+            {               
+                HttpContext.Session.SetString(nameof(CropId),cropId.ToString());
+                HttpContext.Session.SetString("cropName", cropName);
             }
-
             
-            else if (HttpContext.Session.GetInt32(nameof(CropId))!=null)
+            else if (HttpContext.Session.GetString(nameof(CropId))!=null)
             {                
-                cropId = Convert.ToInt32(HttpContext.Session.GetInt32(nameof(CropId)));
+                cropId = Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId)));
                 //cropName = HttpContext.Session.GetString(nameof(cropName));
             }
             else
@@ -46,7 +45,7 @@ namespace JHOEC.Controllers
                 TempData["message"] = "fuck you ";
                 return Redirect($"/JHCrop/Index/");
             }
-            HttpContext.Session.SetString("cropName", cropName);
+
             var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
             return View(await oECContext.ToListAsync());
             
@@ -68,14 +67,14 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["cropName"] = _context.Variety.SingleOrDefault(v => v.VarietyId == id).Name;
             return View(variety);
         }
 
         // GET: JHVariety/Create
         public IActionResult Create()
         {
-            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetInt32(nameof(CropId))));
+            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId))));
             return View();
         }
 
@@ -90,10 +89,11 @@ namespace JHOEC.Controllers
             {
                 _context.Add(variety);
                 await _context.SaveChangesAsync();
+                TempData["message"] = "New variety has been created";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetInt32(nameof(CropId))));
-            TempData["message"] += "Ok";
+            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId))));
+            
             return View(variety);
         }
 
@@ -111,6 +111,9 @@ namespace JHOEC.Controllers
                 return NotFound();
             }
             ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", variety.CropId);
+            ViewData["cropName"] = _context.Variety.SingleOrDefault(v => v.VarietyId == id).Name;
+            //LINQ style vs. EF style
+            /*(from record in _context.Variety.Where(v => v.VarietyId == id) select record.Name).FirstOrDefault()*/;
             return View(variety);
         }
 
@@ -165,7 +168,7 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["cropName"] = _context.Variety.SingleOrDefault(v => v.VarietyId == id).Name;
             return View(variety);
         }
 
