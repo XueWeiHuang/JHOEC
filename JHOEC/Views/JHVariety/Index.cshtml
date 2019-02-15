@@ -28,7 +28,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-controller="JHPlot" asp-action="Index" asp-route-varietyId="@item.VarietyId" asp-route-varietyName="@item.Name">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Crop.Name)

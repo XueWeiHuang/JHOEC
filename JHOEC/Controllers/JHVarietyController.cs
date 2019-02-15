@@ -19,36 +19,45 @@ namespace JHOEC.Controllers
             _context = context;
         }
 
-        private string cropid;
-        public string CropId
-        {
-            get { return cropid; }
-            set { cropid = value; }
-        }
+        //private string cropid;
+        //public string CropId
+        //{
+        //    get { return cropid; }
+        //    set { cropid = value; }
+        //}
         // GET: JHVariety
         public async Task<IActionResult> Index(int? cropId, string cropName)
         {
             
             if (cropId != null && cropId!=0)
             {               
-                HttpContext.Session.SetString(nameof(CropId),cropId.ToString());
-                HttpContext.Session.SetString("cropName", cropName);
-            }
+                HttpContext.Session.SetString(nameof(cropId),cropId.ToString());
+                if (cropName==null ||cropName=="")
+                {
+                    HttpContext.Session.SetString(nameof(cropName), _context.Crop.SingleOrDefault(c => c.CropId == cropId).Name);
+                }
+
+                else
+                    {
+                    HttpContext.Session.SetString(nameof(cropName), cropName);
+                }         
+
+                }
             
-            else if (HttpContext.Session.GetString(nameof(CropId))!=null)
+            else if (HttpContext.Session.GetString(nameof(cropId))!=null)
             {                
-                cropId = Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId)));
+                cropId = Convert.ToInt32(HttpContext.Session.GetString(nameof(cropId)));
+                HttpContext.Session.SetString(nameof(cropName), _context.Crop.SingleOrDefault(c => c.CropId == cropId).Name);
                 //cropName = HttpContext.Session.GetString(nameof(cropName));
             }
             else
             {
-                TempData["message"] = "fuck you ";
+                TempData["message"] = "Please select a crop to view its variety ";
+                //nameof(JHCropController), "Index"
                 return Redirect($"/JHCrop/Index/");
             }
-
             var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
-            return View(await oECContext.ToListAsync());
-            
+            return View(await oECContext.ToListAsync());           
 
         }
 
@@ -74,7 +83,7 @@ namespace JHOEC.Controllers
         // GET: JHVariety/Create
         public IActionResult Create()
         {
-            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId))));
+            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString("cropId")));
             return View();
         }
 
@@ -92,7 +101,7 @@ namespace JHOEC.Controllers
                 TempData["message"] = "New variety has been created";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString(nameof(CropId))));
+            ViewData["CropId"] = new SelectList(_context.Crop, "CropId", "CropId", Convert.ToInt32(HttpContext.Session.GetString("cropId")));
             
             return View(variety);
         }

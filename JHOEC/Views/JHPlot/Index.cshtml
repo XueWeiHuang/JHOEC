@@ -1,0 +1,85 @@
+﻿@model IEnumerable<JHOEC.Models.Plot>
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Index";
+    var head = "";
+    if (Context.Session.GetString("accessRoute")=="crop")
+    {
+        head=$"Plot list for {Context.Session.GetString("cropName")}";
+    }
+    else
+    {
+        head = $"Plot list for {Context.Session.GetString("varietyName")}";
+    }
+    ViewData["spe"] = head;
+}
+
+<h2>Index</h2>
+<h3>@ViewData["spe"]</h3>
+<!--Need to disable the field when in variety field-->
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => model.Farm.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Variety.Crop.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Variety.Name)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.DatePlanted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cec)
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.Treatment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Farm.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Variety.Crop.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Variety.Name)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DatePlanted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cec)
+            </td>
+            <td>
+                @foreach (var treat in item.Treatment)
+                {
+                    @treat.Name<br />
+                }
+
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PlotId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PlotId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PlotId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
