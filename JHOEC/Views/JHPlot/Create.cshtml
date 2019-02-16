@@ -1,24 +1,42 @@
 ﻿@model JHOEC.Models.Plot
+@using Microsoft.AspNetCore.Http
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create a new plot";
+    var head = "";
+    if (Context.Session.GetString("accessRoute") == "crop")
+    {
+        head = $"Create a plot for {Context.Session.GetString("cropName")}";
+    }
+    else
+    {
+        head = $"Create plot for {Context.Session.GetString("cropName")} {Context.Session.GetString("varietyName")}";
+    }
+    ViewData["spe"] = head;
 }
 
-<h2>Create</h2>
+<h2>@ViewData["spe"]</h2>
 
-<h4>Plot</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FarmId" class="control-label"></label>
+                <label asp-for="FarmId" class="control-label">Farm Name</label>
                 <select asp-for="FarmId" class ="form-control" asp-items="ViewBag.FarmId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="VarietyId" class="control-label"></label>
-                <select asp-for="VarietyId" class ="form-control" asp-items="ViewBag.VarietyId" readonly disabled></select>
+                <label asp-for="VarietyId" class="control-label">Variety ID</label>
+                @{ if (Context.Session.GetString("accessRoute") == "crop")
+                    {
+                        <select asp-for="VarietyId" class="form-control" asp-items="ViewBag.VarietyId"></select>
+                    }
+                    else 
+                    {
+                        <select asp-for="VarietyId" class="form-control" asp-items="ViewBag.VarietyId" readonly disabled></select>
+                    }
+                }
             </div>
             <div class="form-group">
                 <label asp-for="DatePlanted" class="control-label"></label>

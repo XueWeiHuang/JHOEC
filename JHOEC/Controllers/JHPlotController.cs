@@ -30,9 +30,9 @@ namespace JHOEC.Controllers
 
 
         // GET: JHPlot
-        public async Task<IActionResult> Index(int? cropId, string cropName, int? varietyId, string varietyName)
+        public async Task<IActionResult> Index(int? cropId, string cropName, int? varietyId, string varietyName, string filter)
         {
-            var oECContext = _context.Plot.Include(p => p.Farm).Include(p => p.Variety).ThenInclude(p => p.Crop).Include(p => p.Treatment).OrderByDescending(p => p.DatePlanted).AsQueryable();
+            var oECContext = _context.Plot.Include(p => p.Farm).Include(p => p.Variety).ThenInclude(p => p.Crop).Include(p => p.Treatment).AsQueryable();
             var accessRoute = HttpContext.Session.GetString("accessRoute");
 
             if ((varietyId!= null && varietyId != 0) || (cropId!=null && cropId !=0))
@@ -51,7 +51,7 @@ namespace JHOEC.Controllers
                     //hard way to is define it again like
                     //oECContext = _context.Plot.Include(p => p.Farm).Include(p => p.Variety).ThenInclude(p => p.Crop).Include(p => p.Treatment).Where(v => v.Variety.CropId == cropId).OrderByDescending(p => p.DatePlanted)
                     //oECContext = oECContext.Where(v => v.Variety.CropId == (Convert.ToInt32(cropId)));
-                    //ViewData["spe"] = $"this is for crop {cropName}";
+
                     accessRoute = CROP_ROUTE;
                 }
                 else 
@@ -71,22 +71,7 @@ namespace JHOEC.Controllers
                 }
                 HttpContext.Session.SetString(nameof(accessRoute), accessRoute);
             }
-            //else if (HttpContext.Session.GetString(nameof(cropId)) != null || HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //{
-            //    if (HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //    {
-            //        varietyId = Convert.ToInt32(HttpContext.Session.GetString(nameof(varietyId)));
-            //        accessRoute = VARIETY_ROUTE;
-            //        //oECContext = oECContext.Where(v => v.Variety.VarietyId == (Convert.ToInt32(varietyId)));
-            //    }
-            //    else if (HttpContext.Session.GetString(nameof(cropId)) != null)
-            //    {
-            //        cropId = Convert.ToInt32(HttpContext.Session.GetString(nameof(cropId)));
-            //        accessRoute = CROP_ROUTE;
-            //        //oECContext = oECContext.Where(v => v.Variety.CropId == (Convert.ToInt32(cropId)));
-            //    }
-            //    //cropName = HttpContext.Session.GetString(nameof(cropName));
-            //}
+
             switch (accessRoute)
             {
                 case VARIETY_ROUTE:
@@ -98,19 +83,15 @@ namespace JHOEC.Controllers
                 default:
                     break;
             }
-            //else if (HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //{
-            //    varietyId = Convert.ToInt32(HttpContext.Session.GetString(nameof(varietyId)));
-            //    //cropName = HttpContext.Session.GetString(nameof(cropName));
-            //}
-            //else
-            //{
-            //    TempData["message"] = "Please select a crop to view its variety ";
-            //    return Redirect($"/JHCrop/Index/");
-            //}
 
-            //var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
-            //return View(await oECContext.ToListAsync());
+            if (filter == "farm")
+                oECContext = oECContext.OrderBy(f => f.Farm.Name).ThenByDescending(p => p.DatePlanted);
+            else if (filter == "variety")
+                oECContext = oECContext.OrderBy(v => v.Variety.Name).ThenByDescending(p => p.DatePlanted);
+            else if (filter == "cec")
+                oECContext = oECContext.OrderBy(c => c.Cec).ThenByDescending(p => p.DatePlanted);
+            else
+                oECContext = oECContext.OrderByDescending(p => p.DatePlanted);
 
             return View(await oECContext.ToListAsync());
         }
@@ -163,8 +144,15 @@ namespace JHOEC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FarmId"] = new SelectList(_context.Farm, "FarmId", "ProvinceCode", plot.FarmId);
-            ViewData["VarietyId"] = new SelectList(_context.Variety, "VarietyId", "VarietyId", plot.VarietyId);
+            ViewData["FarmId"] = new SelectList(_context.Farm, "FarmId", "Name", plot.FarmId);                       
+            if (HttpContext.Session.GetString("accessRoute") == CROP_ROUTE)
+            {
+                ViewData["VarietyId"] = new SelectList(_context.Variety.Where(c => c.CropId == (Convert.ToInt32(HttpContext.Session.GetString("cropId")))).OrderBy(v => v.Name), "VarietyId", "Name", plot.VarietyId);
+            }
+            else if (HttpContext.Session.GetString("accessRoute") == VARIETY_ROUTE)
+            {
+                ViewData["VarietyId"] = new SelectList(_context.Variety.OrderBy(v => v.Name), "VarietyId", "Name", plot.VarietyId);
+            }
             return View(plot);
         }
 
@@ -181,8 +169,8 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-            ViewData["FarmId"] = new SelectList(_context.Farm, "FarmId", "ProvinceCode", plot.FarmId);
-            ViewData["VarietyId"] = new SelectList(_context.Variety, "VarietyId", "VarietyId", plot.VarietyId);
+            ViewData["FarmId"] = new SelectList(_context.Farm.OrderBy(f=>f.Name), "FarmId", "Name", plot.FarmId);
+            ViewData["VarietyId"] = new SelectList(_context.Variety.OrderBy(v=>v.Name), "VarietyId", "Name", plot.VarietyId);
             return View(plot);
         }
 
@@ -218,8 +206,8 @@ namespace JHOEC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FarmId"] = new SelectList(_context.Farm, "FarmId", "ProvinceCode", plot.FarmId);
-            ViewData["VarietyId"] = new SelectList(_context.Variety, "VarietyId", "VarietyId", plot.VarietyId);
+            ViewData["FarmId"] = new SelectList(_context.Farm.OrderBy(f=>f.Name), "FarmId", "ProvinceCode", plot.FarmId);
+            ViewData["VarietyId"] = new SelectList(_context.Variety.OrderBy(v=>v.Name), "VarietyId", "VarietyId", plot.VarietyId);
             return View(plot);
         }
 

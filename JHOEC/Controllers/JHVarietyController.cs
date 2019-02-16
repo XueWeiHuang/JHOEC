@@ -36,13 +36,12 @@ namespace JHOEC.Controllers
                 {
                     HttpContext.Session.SetString(nameof(cropName), _context.Crop.SingleOrDefault(c => c.CropId == cropId).Name);
                 }
-
                 else
                     {
                     HttpContext.Session.SetString(nameof(cropName), cropName);
-                }         
+                }        
 
-                }
+            }
             
             else if (HttpContext.Session.GetString(nameof(cropId))!=null)
             {                
@@ -57,7 +56,7 @@ namespace JHOEC.Controllers
                 return Redirect($"/JHCrop/Index/");
             }
             var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
-            return View(await oECContext.ToListAsync());           
+            return View(await oECContext.ToListAsync());        
 
         }
 

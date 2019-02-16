@@ -1,14 +1,14 @@
 ﻿@model JHOEC.Models.Plot
+@using Microsoft.AspNetCore.Http
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete a plot";
+    ViewData["spe"] = $"Are you sure you want to delete plot of {Context.Session.GetString("cropName")} {Context.Session.GetString("varietyName")}?";
 }
 
-<h2>Delete</h2>
+<h2>@ViewData["spe"]</h2>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Plot</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -129,13 +129,13 @@
             @Html.DisplayNameFor(model => model.Farm)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Farm.ProvinceCode)
+            @Html.DisplayFor(model => model.Farm.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Variety)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Variety.VarietyId)
+            @Html.DisplayFor(model => model.Variety.Name)
         </dd>
     </dl>
     

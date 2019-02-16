@@ -1,12 +1,14 @@
 ﻿@model JHOEC.Models.Plot
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewData["Title"] = "Edit";
+
+    ViewData["spe"] = $"Edit a plot for {Context.Session.GetString("cropName")} {Context.Session.GetString("varietyName")}";
 }
 
-<h2>Edit</h2>
+<h2>@ViewData["spe"]</h2>
 
-<h4>Plot</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,12 +16,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PlotId" />
             <div class="form-group">
-                <label asp-for="FarmId" class="control-label"></label>
+                @*<label class="control-label">Farm Name</label>*@
+                <label asp-for="FarmId" class="control-label" >Farm Name</label>
                 <select asp-for="FarmId" class="form-control" asp-items="ViewBag.FarmId"></select>
                 <span asp-validation-for="FarmId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VarietyId" class="control-label"></label>
+                <label asp-for="VarietyId" class="control-label">Variety Name</label>
                 <select asp-for="VarietyId" class="form-control" asp-items="ViewBag.VarietyId"></select>
                 <span asp-validation-for="VarietyId" class="text-danger"></span>
             </div>

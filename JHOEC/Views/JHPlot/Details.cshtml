@@ -1,13 +1,15 @@
 ﻿@model JHOEC.Models.Plot
+@using Microsoft.AspNetCore.Http
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Plot detail";
+    ViewData["spe"] = $"{Context.Session.GetString("cropName")} {Context.Session.GetString("varietyName")}";
 }
 
-<h2>Details</h2>
+<h2>Plot details of @ViewData["spe"] </h2>
 
 <div>
-    <h4>Plot</h4>
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -128,13 +130,13 @@
             @Html.DisplayNameFor(model => model.Farm)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Farm.ProvinceCode)
+            @Html.DisplayFor(model => model.Farm.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Variety)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Variety.VarietyId)
+            @Html.DisplayFor(model => model.Variety.Name)
         </dd>
     </dl>
 </div>

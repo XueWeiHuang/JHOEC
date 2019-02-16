@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Http
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Plot listing";
     var head = "";
     if (Context.Session.GetString("accessRoute")=="crop")
     {
@@ -14,10 +14,8 @@
     }
     ViewData["spe"] = head;
 }
+<h2>@ViewData["spe"]</h2>
 
-<h2>Index</h2>
-<h3>@ViewData["spe"]</h3>
-<!--Need to disable the field when in variety field-->
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -25,20 +23,20 @@
     <thead>
         <tr>
             <th>
-               @Html.DisplayNameFor(model => model.Farm.Name)
+                <a asp-route-filter="farm">@Html.DisplayNameFor(model => model.Farm.Name)</a>            
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Variety.Crop.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Variety.Name)
+                <a asp-route-filter="variety">@Html.DisplayNameFor(model => model.Variety.Name)</a>
             </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.DatePlanted)
+            <th>                
+                   @Html.DisplayNameFor(model=>model.DatePlanted)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cec)
+                <a asp-route-filter="cec">@Html.DisplayNameFor(model => model.Cec)</a>                
             </th>
             <th>
 
@@ -71,9 +69,7 @@
                 {
                     @treat.Name<br />
                 }
-
             </td>
-
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PlotId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PlotId">Details</a> |
