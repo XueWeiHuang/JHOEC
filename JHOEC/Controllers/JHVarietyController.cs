@@ -56,7 +56,7 @@ namespace JHOEC.Controllers
                 return Redirect($"/JHCrop/Index/");
             }
             var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
-            return View(await oECContext.ToListAsync());        
+            return View(await oECContext.ToListAsync());           
 
         }
 
