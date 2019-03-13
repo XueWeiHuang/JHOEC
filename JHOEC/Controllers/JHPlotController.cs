@@ -15,6 +15,7 @@ namespace JHOEC.Controllers
         private readonly OECContext _context;
         const string CROP_ROUTE = "crop";
         const string VARIETY_ROUTE = "varitey";
+        const string PLOT_ROUTE = "plot";
 
         public JHPlotController(OECContext context)
         {
@@ -30,12 +31,12 @@ namespace JHOEC.Controllers
 
 
         // GET: JHPlot
-        public async Task<IActionResult> Index(int? cropId, string cropName, int? varietyId, string varietyName, string filter)
+        public async Task<IActionResult> Index(int? cropId, string cropName, int? varietyId, string varietyName, string filter, int? plotId, string farmName)
         {
             var oECContext = _context.Plot.Include(p => p.Farm).Include(p => p.Variety).ThenInclude(p => p.Crop).Include(p => p.Treatment).AsQueryable();
             var accessRoute = HttpContext.Session.GetString("accessRoute");
 
-            if ((varietyId!= null && varietyId != 0) || (cropId!=null && cropId !=0))
+            if ((varietyId!= null && varietyId != 0) || (cropId!=null && cropId !=0) || (plotId!=null && plotId!=0))
             {
                 if (cropId!=0 && cropId!=null)
                 {                
@@ -54,6 +55,11 @@ namespace JHOEC.Controllers
                     //ViewData["spe"] = $"this is for crop {cropName}";
                     accessRoute = CROP_ROUTE;
                 }
+                else if (plotId!=0 && plotId!=null)
+                {
+                    HttpContext.Session.SetString(nameof(plotId), plotId.ToString());
+                    accessRoute = PLOT_ROUTE;
+                }
                 else 
                 {
                     HttpContext.Session.SetString(nameof(varietyId), varietyId.ToString());
@@ -66,27 +72,12 @@ namespace JHOEC.Controllers
                         HttpContext.Session.SetString(nameof(varietyName), varietyName);
                     }
                     //oECContext = oECContext.Where(v => v.Variety.VarietyId == (Convert.ToInt32(varietyId)));
-                    //ViewData["spe"] = $"this is for variety {varietyName}";
+
                     accessRoute = VARIETY_ROUTE;
                 }
                 HttpContext.Session.SetString(nameof(accessRoute), accessRoute);
             }
-            //else if (HttpContext.Session.GetString(nameof(cropId)) != null || HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //{
-            //    if (HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //    {
-            //        varietyId = Convert.ToInt32(HttpContext.Session.GetString(nameof(varietyId)));
-            //        accessRoute = VARIETY_ROUTE;
-            //        //oECContext = oECContext.Where(v => v.Variety.VarietyId == (Convert.ToInt32(varietyId)));
-            //    }
-            //    else if (HttpContext.Session.GetString(nameof(cropId)) != null)
-            //    {
-            //        cropId = Convert.ToInt32(HttpContext.Session.GetString(nameof(cropId)));
-            //        accessRoute = CROP_ROUTE;
-            //        //oECContext = oECContext.Where(v => v.Variety.CropId == (Convert.ToInt32(cropId)));
-            //    }
-            //    //cropName = HttpContext.Session.GetString(nameof(cropName));
-            //}
+
             switch (accessRoute)
             {
                 case VARIETY_ROUTE:
@@ -95,22 +86,13 @@ namespace JHOEC.Controllers
                 case CROP_ROUTE:
                     oECContext = oECContext.Where(v => v.Variety.CropId == (Convert.ToInt32(HttpContext.Session.GetString(nameof(cropId)))));
                     break;
+                case PLOT_ROUTE:
+                    oECContext = oECContext.Where(v => v.PlotId == (Convert.ToInt32(HttpContext.Session.GetString(nameof(cropId)))));
+                    break;
                 default:
                     break;
             }
-            //else if (HttpContext.Session.GetString(nameof(varietyId)) != null)
-            //{
-            //    varietyId = Convert.ToInt32(HttpContext.Session.GetString(nameof(varietyId)));
-            //    //cropName = HttpContext.Session.GetString(nameof(cropName));
-            //}
-            //else
-            //{
-            //    TempData["message"] = "Please select a crop to view its variety ";
-            //    return Redirect($"/JHCrop/Index/");
-            //}
 
-            //var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
-            //return View(await oECContext.ToListAsync());
             if (filter == "farm")
                 oECContext = oECContext.OrderBy(f => f.Farm.Name).ThenByDescending(p => p.DatePlanted);
             else if (filter == "variety")

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JHOEC.Models
 {
@@ -10,7 +11,7 @@ namespace JHOEC.Models
         public string FertilizerName { get; set; }
         public double? RatePerAcre { get; set; }
         public string RateMetric { get; set; }
-
+        [Display (Name = "Fertilizer Name")]
         public Fertilizer FertilizerNameNavigation { get; set; }
         public Treatment Treatment { get; set; }
     }

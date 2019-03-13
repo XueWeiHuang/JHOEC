@@ -1,0 +1,52 @@
+﻿@model IEnumerable<JHOEC.Models.TreatmentFertilizer>
+
+@{
+    ViewData["Title"] = "List of Treatment Fertilizers";
+}
+
+<h2>Fertilizer List for Treatment of @ViewData["treatmentName"]</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.FertilizerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RatePerAcre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RateMetric)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem=>item.FertilizerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatePerAcre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateMetric)
+            </td>
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TreatmentFertilizerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TreatmentFertilizerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TreatmentFertilizerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<span>
+    <a asp-action="Index" asp-controller="JHTreatment">Back to treatment</a>
+</span>
