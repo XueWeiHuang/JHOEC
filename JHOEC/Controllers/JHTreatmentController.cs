@@ -37,6 +37,7 @@ namespace JHOEC.Controllers
                 {
                     
                     var fertilizerName = treatmentFertilizer.TreatmentFertilizer.OrderBy(t => t.FertilizerName).Select(t => t.FertilizerName).ToList();
+                    //fertilizerName.Any() ? string.Join("+", fertilizerName) : "no fertilizer";
                     if (fertilizerName.Any())
                     {
                         treatmentFertilizer.Name = String.Join(" + ", fertilizerName);
@@ -53,6 +54,8 @@ namespace JHOEC.Controllers
                 TempData["message"] = "Please select a plot to view treatments";
                 return RedirectToAction("Index", "JHPlot");
             }
+
+            // can be used to replace the if else below string.IsNullOrEmpty(farmName)? 
             if (farmName == null || farmName == "")
             {
                 HttpContext.Session.SetString(nameof(farmName), _context.Plot.Include(p => p.Farm).SingleOrDefault(p => p.PlotId == plotId).Farm.Name);

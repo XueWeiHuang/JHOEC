@@ -1,0 +1,54 @@
+﻿@model JHOEC.Models.Province
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Province</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model=>model.ProvinceCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model=>model.ProvinceCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CountryCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CountryCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RetailTaxName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RetailTaxName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RetailTaxRate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RetailTaxRate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FederalTaxIncluded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FederalTaxIncluded)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ProvinceCode">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

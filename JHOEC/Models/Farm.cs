@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JHOEC.Models
 {
@@ -11,6 +12,7 @@ namespace JHOEC.Models
         }
 
         public int FarmId { get; set; }
+
         public string Name { get; set; }
         public string Address { get; set; }
         public string Town { get; set; }

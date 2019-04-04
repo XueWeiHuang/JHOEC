@@ -171,6 +171,7 @@ namespace JHOEC.Controllers
                 .Include(t => t.FertilizerNameNavigation)
                 .Include(t => t.Treatment)
                 .FirstOrDefaultAsync(m => m.TreatmentFertilizerId == id);
+            //interesting things : treatmentFertilizer.result.  will have all results
             if (treatmentFertilizer == null)
             {
                 return NotFound();
