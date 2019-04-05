@@ -8,7 +8,6 @@ using JHClassLibrary;
 
 
 
-
 namespace JHOEC.Models
 {
     [ModelMetadataType(typeof(FarmMetadata))]
@@ -31,7 +30,6 @@ namespace JHOEC.Models
             if (!string.IsNullOrEmpty(Directions))
                 Directions = Directions.Trim();
 
-
             //capitalize name
             if (!string.IsNullOrEmpty(Name.Trim()))
             {
@@ -43,7 +41,6 @@ namespace JHOEC.Models
             {
                 yield return new ValidationResult("Name cannot be empty strings", new string[] { nameof(Name) });
             }
-
 
             //capitalize address
             if (!string.IsNullOrEmpty(Address))
@@ -87,7 +84,6 @@ namespace JHOEC.Models
             if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(PostalCode))
             {
                 yield return new ValidationResult("Either Email or Address and Postal Code must be provided", new[] { nameof(Address), nameof(PostalCode), nameof(Email) });
-
             }
 
             //force province code to upper case
@@ -125,9 +121,7 @@ namespace JHOEC.Models
                 else
                 {
                     yield return new ValidationResult(" Zip Code is invalid. The format doesnt match '123456' or '12345-6789'", new[] { nameof(PostalCode) });
-
                 }
-
             }
 
             //last contacted date cannot before join date, AND cannot exist if the farm hasn't joined yet
@@ -172,24 +166,16 @@ namespace JHOEC.Models
                 else
                 {
                     yield return new ValidationResult(" Home phone number is invalid. The format doesnt match '123-456-7890'", new[] { nameof(HomePhone) });
-
                 }
             }
-
-
             yield return ValidationResult.Success;
         }
     }
-
-
-
-
-
+          
     public class FarmMetadata
     {
-
         public int FarmId { get; set; }
-
+        [Display(Name ="Farm Name")]
         [Required]
         public string Name { get; set; }
         public string Address { get; set; }

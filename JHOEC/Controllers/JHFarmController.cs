@@ -12,7 +12,6 @@ namespace JHOEC.Controllers
     public class JHFarmController : Controller
     {
         private readonly OECContext _context;
-
         public JHFarmController(OECContext context)
         {
             _context = context;
@@ -21,7 +20,7 @@ namespace JHOEC.Controllers
         // GET: JHFarm
         public async Task<IActionResult> Index()
         {
-            var oECContext = _context.Farm.Include(f => f.ProvinceCodeNavigation).OrderBy(f=>f.Name);
+            var oECContext = _context.Farm.Include(f => f.ProvinceCodeNavigation).OrderBy(f => f.Name);
             return View(await oECContext.ToListAsync());
         }
 
@@ -40,7 +39,6 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-
             return View(farm);
         }
 
@@ -63,7 +61,7 @@ namespace JHOEC.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(farm);
-                    if (await TryUpdateModelAsync(_context))
+                    if (await TryUpdateModelAsync(farm))
                     {
                         await _context.SaveChangesAsync();
                         TempData["message"] = "Farm creation sucessfull";
@@ -72,7 +70,7 @@ namespace JHOEC.Controllers
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", $"error creating farm {ex.GetBaseException().Message}");
             }
@@ -95,7 +93,7 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProvinceCode"] = new SelectList(_context.Province.OrderBy(p=>p.Name), "ProvinceCode", "Name", farm.ProvinceCode);
+            ViewData["ProvinceCode"] = new SelectList(_context.Province.OrderBy(p => p.Name), "ProvinceCode", "Name", farm.ProvinceCode);
             return View(farm);
         }
 
@@ -111,39 +109,34 @@ namespace JHOEC.Controllers
             {
                 return NotFound();
             }
-            try
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    try
+                    //should just pass in the object instead of context
+                    if (await TryUpdateModelAsync(farm))
                     {
-                        if(await TryUpdateModelAsync(_context))
-                        {
-                            _context.Update(farm);
-                            TempData["message"] = "Update sucessful";
-                            await _context.SaveChangesAsync();
-                        }                        
+                        _context.Update(farm);
+                        TempData["message"] = "Update sucessful";
+                        await _context.SaveChangesAsync();
                     }
-                    catch (DbUpdateConcurrencyException de)
-                    {
-                        if (!FarmExists(farm.FarmId))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", $"error updating farm information: {de.GetBaseException().Message}");
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
                 }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"error updating farm information: {ex.GetBaseException().Message}");
+                catch (DbUpdateConcurrencyException de)
+                {
+                    if (!FarmExists(farm.FarmId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", $"error updating farm information: {de.GetBaseException().Message}");
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
             await Edit(id);
-            ViewData["ProvinceCode"] = new SelectList(_context.Province.OrderBy(p=>p.Name), "ProvinceCode", "Name", farm.ProvinceCode);
+            ViewData["ProvinceCode"] = new SelectList(_context.Province.OrderBy(p => p.Name), "ProvinceCode", "Name", farm.ProvinceCode);
             return View(farm);
         }
 
@@ -176,16 +169,15 @@ namespace JHOEC.Controllers
                 var farm = await _context.Farm.FindAsync(id);
                 _context.Farm.Remove(farm);
                 await _context.SaveChangesAsync();
-                TempData["message"] = "Delete completely sucessfully";
+                TempData["message"] = "Delete completed sucessfully";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["message"]=$"error inserting new order: {ex.GetBaseException().Message}";
+                TempData["message"] = $"error inserting new order: {ex.GetBaseException().Message}";
                 return await Delete(id);
             }
         }
-
         private bool FarmExists(int id)
         {
             return _context.Farm.Any(e => e.FarmId == id);
