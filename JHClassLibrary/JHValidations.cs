@@ -29,6 +29,7 @@ namespace JHClassLibrary
             else if (postCodePattern.IsMatch(input))
             {
                 input = input.Trim();
+                input = input.Replace(" ", "");
                 input = input.Insert(3, " ").ToUpper();
                 return true;
             }
@@ -47,9 +48,10 @@ namespace JHClassLibrary
             {
                 return true;
             }
-            //need to remove any other things excetp numbers
-            else if ((Regex.Replace(input, "[^0-9]*$", "")).Length != 5 || (Regex.Replace(input.ToString(), "[^0-9]", "")).Length != 9)
+            //need to remove any other things except numbers
+            else if ((Regex.Replace(input, "[^0-9]*$", "")).Length != 5 && (Regex.Replace(input.ToString(), "[^0-9]", "")).Length != 9)
             {
+                var test = Regex.Replace(input, "[^0-9]*$", "");
                 return false;
             }
             else
@@ -62,8 +64,12 @@ namespace JHClassLibrary
                     }
                     else if (input.Length == 9)
                     {
+                        input = input.Trim();
                         input = input.Insert(5, "-");
-
+                    }
+                    else if (input.Length==10)
+                    {
+                        return true;
                     }
                     return true;
                 }

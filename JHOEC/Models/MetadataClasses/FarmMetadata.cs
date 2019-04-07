@@ -120,7 +120,7 @@ namespace JHOEC.Models
                 }
                 else
                 {
-                    yield return new ValidationResult(" Zip Code is invalid. The format doesnt match '123456' or '12345-6789'", new[] { nameof(PostalCode) });
+                    yield return new ValidationResult(" Zip Code is invalid. The format doesnt match '12345' or '12345-6789'", new[] { nameof(PostalCode) });
                 }
             }
 

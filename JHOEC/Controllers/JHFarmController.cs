@@ -118,7 +118,7 @@ namespace JHOEC.Controllers
                     if (await TryUpdateModelAsync(farm))
                     {
                         _context.Update(farm);
-                        TempData["message"] = "Update sucessful";
+                        TempData["message"] = "Update sucessfull";
                         await _context.SaveChangesAsync();
                     }
                 }
