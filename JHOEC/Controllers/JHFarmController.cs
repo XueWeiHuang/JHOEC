@@ -60,9 +60,10 @@ namespace JHOEC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(farm);
+                    
                     if (await TryUpdateModelAsync(farm))
                     {
+                        _context.Add(farm);
                         await _context.SaveChangesAsync();
                         TempData["message"] = "Farm creation sucessfull";
                         return RedirectToAction(nameof(Index));

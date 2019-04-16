@@ -28,6 +28,7 @@ namespace JHClassLibrary
 
             else if (postCodePattern.IsMatch(input))
             {
+                
                 input = input.Trim();
                 input = input.Replace(" ", "");
                 input = input.Insert(3, " ").ToUpper();
@@ -44,20 +45,22 @@ namespace JHClassLibrary
         {
             Regex zipCodePattern = new Regex(@"^[0-9]{5}(?:-[0-9]{4})?$", RegexOptions.IgnoreCase);
 
-            if (string.IsNullOrEmpty(input.ToString()))
+            if (string.IsNullOrEmpty(input))
             {
                 return true;
             }
             //need to remove any other things except numbers
-            else if ((Regex.Replace(input, "[^0-9]*$", "")).Length != 5 && (Regex.Replace(input.ToString(), "[^0-9]", "")).Length != 9)
+            else if ((Regex.Replace(input, "[^0-9]*$", "")).Length != 5 && (Regex.Replace(input.ToString(), "[^0-9]*$", "")).Length != 9)
             {
                 var test = Regex.Replace(input, "[^0-9]*$", "");
                 return false;
             }
             else
             {
-                if (zipCodePattern.IsMatch(input.ToString()))
+                if (zipCodePattern.IsMatch(Regex.Replace(input, "[^0-9]*$", "")))
                 {
+                    // make sure it is correct
+                    input = Regex.Replace(input, "[^0-9]*$", "");
                     if (input.Length == 5)
                     {
                         input = input.Trim();

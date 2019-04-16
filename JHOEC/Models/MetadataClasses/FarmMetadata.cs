@@ -87,7 +87,7 @@ namespace JHOEC.Models
             }
 
             //force province code to upper case
-            if (string.IsNullOrEmpty(ProvinceCode))
+            if (!string.IsNullOrEmpty(ProvinceCode))
             {
                 ProvinceCode = ProvinceCode.Trim();
                 ProvinceCode = ProvinceCode.ToUpper();
