@@ -53,7 +53,7 @@ namespace JHOEC.Controllers
             {
                 TempData["message"] = "Please select a crop to view its variety ";
                 //nameof(JHCropController), "Index"
-                return Redirect($"/JHCrop/Index/");
+                return RedirectToAction("Index", "JHCrop");
             }
             var oECContext = _context.Variety.Include(v => v.Crop).Where(v => v.CropId == cropId).OrderBy(v => v.Name);
             return View(await oECContext.ToListAsync());           

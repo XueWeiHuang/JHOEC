@@ -3,6 +3,7 @@ for details on configuring this project to bundle and minify static web assets. 
 body {
     padding-top: 100px;
     padding-bottom: 20px;
+    background-image: url("../images/fresh-leaves.jpg");
 }
 
 /* Wrapping element */
@@ -10,8 +11,8 @@ body {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+   
 }
-
 
 
 /* Carousel */

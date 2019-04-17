@@ -35,7 +35,7 @@ namespace JHOEC.Models
                     {
                         var optionsBuilder = new DbContextOptionsBuilder<OECContext>();
                         optionsBuilder.UseSqlServer(
-                            "Data Source=LAPTOP-N5C7LNBV;Initial Catalog=OEC;Integrated Security=True");
+                            "Data Source=tcp:waterloofertilizerdbserver.database.windows.net,1433;Initial Catalog=WaterlooFertilizer_db;User Id=hxw1302@waterloofertilizerdbserver;Password=Hxw875623");
                         _context = new OECContext(optionsBuilder.Options);
                     }
                 }
